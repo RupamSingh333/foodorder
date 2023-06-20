@@ -1,4 +1,4 @@
-import Cart from "../UI/Cart";
+import Card from "../UI/Card";
 import classes from "./AvailableMeals.module.css";
 import MealItem from "./MealItem/MealItem";
 
@@ -42,9 +42,9 @@ const AvailableMeals = () => {
 
   return (
     <section className={classes.meals}>
-      <Cart>
+      <Card>
         <ul>{mealsList}</ul>
-      </Cart>
+      </Card>
     </section>
   );
 };
