@@ -10,7 +10,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-
+import { Link } from 'react-router-dom';
 export default function TemporaryDrawer() {
   const [state, setState] = React.useState({
     right: false,
@@ -37,7 +37,7 @@ export default function TemporaryDrawer() {
             <ListItemIcon>
               <LockOpenIcon />
             </ListItemIcon>
-            <ListItemText primary="Login" />
+      <Link to ="/login"><ListItemText primary="Login" /></Link> 
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
@@ -45,7 +45,7 @@ export default function TemporaryDrawer() {
             <ListItemIcon>
               <PersonAddIcon />
             </ListItemIcon>
-            <ListItemText primary="Sign Up" />
+            <Link to ="/signup"><ListItemText primary="Sign up" /></Link> 
           </ListItemButton>
         </ListItem>
       </List>

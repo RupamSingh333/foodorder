@@ -9,7 +9,7 @@ import LoginForm from "./Auth/LoginForm";
 import SignupForm from "./Auth/SignupForm";
 import ProductList from "./Products/ProductList";
 import AddProductForm from "./Products/AddProductForm";
-
+import Footer from "./components/Layout/Footer";
 function App() {
   const [cartIsShown, setCartIsShown] = useState(false);
 
@@ -38,6 +38,7 @@ function App() {
             <Route path="/" element={<Meals />} />
           </Routes>
           {cartIsShown && <Cart items={cartItems} onCloseCart={hideCartHandler} />}
+          <Footer />
         </Router>
       </CartProvider>
     </AuthContextProvider>
