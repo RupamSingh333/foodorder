@@ -10,7 +10,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 10%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 8px rgba(235, 225, 225, 0.25);
   z-index: 10;
 }
 
@@ -27,8 +27,6 @@
   width: 110%;
   height: 100%;
   object-fit: cover;
-  transform: rotateZ(-5deg) translateY(-4rem) translateX(-1rem);
-  filter: brightness(70%);
 }
 
 .logo {
@@ -38,12 +36,11 @@
   margin-left: 1rem; /* Add margin to push the logo to the left */
 }
 
-
 .logo h1 {
   margin: 0;
   font-size: 2rem;
   color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 2px 2px 4px rgba(160, 142, 142, 0.5);
 }
 .header button {
   margin-right: 1rem;
@@ -58,4 +55,41 @@
   position: absolute;
   top: -5px;
   right: -5px;
+}
+.image-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Ensure the container has a height to center vertically */
+}
+.search-container {
+  position: absolute;
+  top: 180px; /* Adjust the top value as per your desired position */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+}
+
+.search-button {
+  margin-left: 10px; /* Add margin between input and button */
+  padding: 8px 16px;
+  background-color: #8a2b06;
+  border: none;
+  font-size: 14px;
+  color: white;
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%; /* Adjust the image size as needed */
+  max-height: 100%; /* Adjust the image size as needed */
+}
+.search-container input[type="text"] {
+  font-size: 25px;
+  border: none;
+  text-align: center;
+  width: 80%; /* Adjust the width as per your requirements */
+  margin: 0 auto; /* Centers the search box horizontally */
 }

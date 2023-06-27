@@ -60,6 +60,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import mealsImage from "../assest/pexels-ella-olsson-1640772.jpg";
 
 
 // TODO remove, this demo shouldn't need to reset the theme.

@@ -3,7 +3,10 @@ import './Footer.css';
 
 const Footer = () => {
   return (
-    <footer className="footer">
+    
+    <div><br/>
+    <footer className="footer"> 
+    
       <div className="footer-content">
         <div className="footer-section">
           <h2 className="footer-heading">Contact Us</h2>
@@ -37,6 +40,7 @@ const Footer = () => {
       </div>
       <p className="footer-info">&copy; 2023 Doomshell Software. All rights reserved.</p>
     </footer>
+    </div>
   );
 };
 
