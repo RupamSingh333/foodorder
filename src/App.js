@@ -29,6 +29,7 @@ function App() {
       setIsLoading(false);
     }, 1000);
   }, []);
+  
 
   return (
     <div>
