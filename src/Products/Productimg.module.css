@@ -29,3 +29,12 @@ text-align: center;
         top: 35px;
         left: 0;
     }
+.catgoryimg{
+        width: 150px; 
+        height: 150px;
+border-radius:60%
+}
+.catgoryBox{
+        width: 130px;
+    height: 96px;
+}

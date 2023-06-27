@@ -55,6 +55,7 @@ function App() {
                   <Route path="/products" element={<ProductList />} />
                   <Route path="/add-product" element={<AddProductForm />} />
                   <Route path="/" element={<Meals />} />
+
                 </Routes>
                 {cartIsShown && <Cart onCloseCart={hideCartHandler} />}
                 <Footer />

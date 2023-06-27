@@ -2,29 +2,83 @@ import axios from "axios";
 // Set the base URL for your API requests
 const API_BASE_URL = "http://localhost:5000/api";
 // Example API functions
+
+const userDataArr = [{ email: 'admin@doomshell.com', password: '12345', username: 'Rupam Singh' }];
+
 export const loginUser = async (email, password) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/login`, {
-      email,
-      password,
-    });
-    return response.data;
+
+    // const response = await axios.post(`${API_BASE_URL}/login`, {
+    //   email,
+    //   password,
+    // });
+
+    const existingUser = userDataArr.find((user) => user.email === email);
+
+    if (!existingUser) {
+      // User does not exist with the provided email
+      return {
+        success: false,
+        message: 'Invalid User credential!',
+      };
+    }
+
+    if (existingUser.password !== password) {
+      // Password does not match
+      return {
+        success: false,
+        message: 'Invalid password!',
+      };
+    }
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    return {
+      data: existingUser,
+      success: true,
+      message: 'Login Successful!',
+    };
   } catch (error) {
-    throw error.response.data;
+    throw error;
   }
 };
+
 export const registerUser = async (username, email, password) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/register`, {
-      username,
+
+    // const response = await axios.post(`${API_BASE_URL}/register`, {
+    //   username,
+    //   email,
+    //   password,
+    // });
+
+    const existingUser = userDataArr.find((user) => user.email === email);
+
+    if (existingUser) {
+      // User already exists with the provided email
+      return {
+        success: false,
+        message: 'Email already exist !',
+      };
+    }
+
+    const newUser = {
       email,
       password,
-    });
-    return response.data;
+      username,
+    };
+
+    userDataArr.push(newUser);
+    // Simulate an API response delay
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    return {
+      success: true,
+      message: 'User registered successfully',
+    };
+
   } catch (error) {
-    throw error.response.data;
+    throw error;
   }
 };
+
 export const addProduct = async (productData) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/products`, productData);
@@ -33,6 +87,7 @@ export const addProduct = async (productData) => {
     throw error.response.data;
   }
 };
+
 export const getAllProducts = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/products`);

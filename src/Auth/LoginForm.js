@@ -3,78 +3,97 @@
 // import { AuthContext } from "./AuthContext";
 // import classes from "./LoginForm.module.css";
 
-// const LoginForm = () => {
-//   const { setLoggedInUser } = useContext(AuthContext);
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [error, setError] = useState("");
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setError("");
-
-//     try {
-//       const user = await loginUser(email, password);
-//       setLoggedInUser(user);
-//       // Redirect or perform desired action upon successful login
-//     } catch (error) {
-//       setError(error.message);
-//     }
-//   };
-
-//   return (
-//     <div className={classes["login-form-container"]}>
-//       <h2>Login</h2>
-//       <form onSubmit={handleSubmit}>
-//         <input
-//           type="text"
-//           placeholder="Username"
-//           value={email}
-//           onChange={(e) => setEmail(e.target.value)}
-//         />
-//         <input
-//           type="password"
-//           placeholder="Password"
-//           value={password}
-//           onChange={(e) => setPassword(e.target.value)}
-//         />
-//         <button type="submit">Log In</button>
-//       </form>
-//       {error && <p>{error}</p>}
-//     </div>
-//   );
-// };
-
-// export default LoginForm;
-import * as React from 'react';
+import React, { useContext } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
+import { Link } from "react-router-dom";
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import mealsImage from "../assest/pexels-ella-olsson-1640772.jpg";
-
-
-// TODO remove, this demo shouldn't need to reset the theme.
+import { loginUser } from '../api/api';
+import { LoadingButton } from '@mui/lab';
+import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from "./AuthContext";
 
 const defaultTheme = createTheme();
 
-export default function SignUp() {
-  const handleSubmit = (event) => {
+export default function LoginForm() {
+
+  const { login } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+
+  const [formErrors, setFormErrors] = React.useState({
+    email: false,
+    password: false,
+  });
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const formData = {
       email: data.get('email'),
       password: data.get('password'),
-    });
+    };
+
+    const errors = {
+      email: !formData.email,
+      password: !formData.password,
+    };
+
+    setFormErrors(errors);
+
+    if (Object.values(errors).some((error) => error)) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await login(formData.email, formData.password);
+      // console.log("🚀 ~ file: LoginForm.js:66 ~ handleSubmit ~ response:", response)
+      if (response.success) {
+        navigate("/", { replace: true });
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: response.message,
+          showConfirmButton: false,
+          timer: 1500
+        })
+
+      } else {
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: response.message,
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
+    } catch (error) {
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        error,
+        showConfirmButton: false,
+        timer: 1500
+      })
+      console.error(error);
+      // Handle the error from the API
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -93,9 +112,11 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-          Sign in           </Typography>
+            Log In
+          </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
+
               <Grid item xs={12}>
                 <TextField
                   required
@@ -104,6 +125,8 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  error={formErrors.email}
+                  helperText={formErrors.email ? 'Please enter a valid email address' : ''}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -115,6 +138,8 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  error={formErrors.password}
+                  helperText={formErrors.password ? 'Please enter a password' : ''}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -124,18 +149,21 @@ export default function SignUp() {
                 />
               </Grid>
             </Grid>
-            <Button
+            <LoadingButton
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              loading={isLoading}
+              loadingPosition="start"
+              startIcon={isLoading && <CircularProgress size={20} />}
             >
-              Sign Up
-            </Button>
+              Log In
+            </LoadingButton>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/signup" variant="body2">
-                  Already have an account? Sign up
+                <Link to="/signup" variant="body2">
+                  Don't have an account? Sign In
                 </Link>
               </Grid>
             </Grid>

@@ -1,5 +1,5 @@
-import React, { Fragment, useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, Fragment, useState } from "react";
+import { Link, json } from "react-router-dom";
 import mealsImage from "../../assest/pexels-ella-olsson-1640772.jpg";
 import classes from "../Layout/Header.module.css";
 import { styled, alpha } from "@mui/material/styles";
@@ -20,6 +20,11 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import CartContext from "../../store/cart-context";
+import { AuthContext } from "../../Auth/AuthContext";
+import Button from "@mui/material/Button";
+import ClipLoader from "react-spinners/ClipLoader";
+
+// import { Button } from "@mui/material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -63,17 +68,36 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const pages = ["Products", "Pricing", "Blog"];
 
 export default function Header(props) {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+
   const cartCtx = useContext(CartContext);
+  const { loggedInUser, logout } = useContext(AuthContext);
   const { items } = cartCtx;
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (loggedInUser && logout) {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+    }
+  }, [loggedInUser, logout]);
+
+  // if (isLoading) {
+  //   return <ClipLoader
+  //     // color={color}
+  //     loading={isLoading}
+  //     size={100}
+  //     aria-label="Loading Spinner"
+  //     data-testid="loader"
+  //   />;
+  // }
 
   const numberOfCartItems = items.reduce((curNumber, item) => {
     return curNumber + item.amount;
   }, 0);
-
-  console.log(props);
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -89,6 +113,11 @@ export default function Header(props) {
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
+  };
+
+  const handleLogout = () => {
+    logout();
+    handleMenuClose();
   };
 
   const handleMobileMenuOpen = (event) => {
@@ -116,22 +145,20 @@ export default function Header(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}>
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      {/* <MenuItem onClick={handleMenuClose}>My account</MenuItem> */}
       <MenuItem onClick={handleMenuClose}>
         <Link to="/add-product" style={menuItemStyle}>
           Add Product
         </Link>
       </MenuItem>
-      <MenuItem onClick={handleMenuClose}>
-        <Link to="/login" style={menuItemStyle}>
-          Login
-        </Link>
+      <MenuItem onClick={handleLogout}>
+        <Link style={menuItemStyle}>Logout</Link>
       </MenuItem>
-      <MenuItem onClick={handleMenuClose}>
+      {/* <MenuItem onClick={handleMenuClose}>
         <Link to="/signup" style={menuItemStyle}>
           Signup
         </Link>
-      </MenuItem>
+      </MenuItem> */}
     </Menu>
   );
 
@@ -165,6 +192,7 @@ export default function Header(props) {
           aria-label="show 17 new notifications"
           color="inherit">
           <Badge
+            className={classes.bump}
             badgeContent={numberOfCartItems}
             color="error"
             onClick={props.onShowCart}>
@@ -173,6 +201,7 @@ export default function Header(props) {
         </IconButton>
         <p>Cart</p>
       </MenuItem>
+
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -184,6 +213,7 @@ export default function Header(props) {
         </IconButton>
         <p>Profile</p>
       </MenuItem>
+
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -232,10 +262,12 @@ export default function Header(props) {
             />
           </Search> */}
 
-
             <Box sx={{ flexGrow: 1 }} />
 
-            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <Box
+              sx={{
+                display: { xs: "none", md: "flex", alignItems: "center" },
+              }}>
               <IconButton
                 size="large"
                 aria-label="show 4 new mails"
@@ -247,24 +279,54 @@ export default function Header(props) {
               <IconButton
                 size="large"
                 aria-label="show 17 new notifications"
-                color="inherit">
+                color="inherit"
+                onClick={props.onShowCart}>
                 <Badge
+                  className={classes.bump}
                   badgeContent={numberOfCartItems}
-                  color="error"
-                  onClick={props.onShowCart}>
+                  color="error">
                   <ShoppingCartIcon />
                 </Badge>
               </IconButton>
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit">
-                <AccountCircle />
-              </IconButton>
+
+              {loggedInUser ? (
+                // <IconButton
+                //   size="large"
+                //   edge="end"
+                //   aria-label="account of current user"
+                //   aria-controls={menuId}
+                //   aria-haspopup="true"
+                //   onClick={handleProfileMenuOpen}
+                //   color="inherit">
+                //   <AccountCircle />
+                // </IconButton>
+                <Button
+                  onClick={handleProfileMenuOpen}
+                  variant="outlined"
+                  size="medium"
+                  style={{
+                    color: "black",
+                    background: "white",
+                    fontWeight: "bold",
+                    borderRadius: "14px",
+                  }}>
+                  Welcome {loggedInUser.username}
+                </Button>
+              ) : (
+                <Link to="/login">
+                  <Button
+                    variant="outlined"
+                    size="medium"
+                    style={{
+                      color: "black",
+                      background: "white",
+                      fontWeight: "bold",
+                      borderRadius: "14px",
+                    }}>
+                    Login
+                  </Button>
+                </Link>
+              )}
             </Box>
 
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
