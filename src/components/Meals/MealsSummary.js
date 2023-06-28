@@ -12,6 +12,10 @@ const MealsSummary = () => {
         All our meals are cooked with high-quality ingredients, just-in-time and
         of course by experienced chefs!
       </p>
+
+      <p>
+        Whether you're a busy professional seeking a hassle-free meal or a food enthusiast looking to explore new flavors, Delicious Food, Delivered To You is your go-to destination.
+      </p>
     </section>
   );
 };

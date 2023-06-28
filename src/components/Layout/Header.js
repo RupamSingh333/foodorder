@@ -1,73 +1,74 @@
 import React, { useContext, useEffect, Fragment, useState } from "react";
-import { Link, json } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import mealsImage from "../../assest/pexels-ella-olsson-1640772.jpg";
 import classes from "../Layout/Header.module.css";
-import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import CartContext from "../../store/cart-context";
 import { AuthContext } from "../../Auth/AuthContext";
 import Button from "@mui/material/Button";
-import ClipLoader from "react-spinners/ClipLoader";
+import { Loader, Placeholder } from 'rsuite';
+// import InputBase from "@mui/material/InputBase";
+// import { styled, alpha } from "@mui/material/styles";
+// import MenuIcon from "@mui/icons-material/Menu";
+// import SearchIcon from "@mui/icons-material/Search";
+// import NotificationsIcon from "@mui/icons-material/Notifications";
+// import logo from "../../assest/mylogo.png";
 
-// import { Button } from "@mui/material";
+// const Search = styled("div")(({ theme }) => ({
+//   position: "relative",
+//   borderRadius: theme.shape.borderRadius,
+//   backgroundColor: alpha(theme.palette.common.white, 0.15),
+//   "&:hover": {
+//     backgroundColor: alpha(theme.palette.common.white, 0.25),
+//   },
+//   marginRight: theme.spacing(2),
+//   marginLeft: 0,
+//   width: "100%",
+//   [theme.breakpoints.up("sm")]: {
+//     marginLeft: theme.spacing(3),
+//     width: "auto",
+//   },
+// }));
 
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-}));
+// const SearchIconWrapper = styled("div")(({ theme }) => ({
+//   padding: theme.spacing(0, 2),
+//   height: "100%",
+//   position: "absolute",
+//   pointerEvents: "none",
+//   display: "flex",
+//   alignItems: "center",
+//   justifyContent: "center",
+// }));
 
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
+// const StyledInputBase = styled(InputBase)(({ theme }) => ({
+//   color: "inherit",
+//   "& .MuiInputBase-input": {
+//     padding: theme.spacing(1, 1, 1, 0),
+//     // vertical padding + font size from searchIcon
+//     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+//     transition: theme.transitions.create("width"),
+//     width: "100%",
+//     [theme.breakpoints.up("md")]: {
+//       width: "20ch",
+//     },
+//   },
+// }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
-  },
-}));
-const pages = ["Products", "Pricing", "Blog"];
 
 export default function Header(props) {
+
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
@@ -80,20 +81,19 @@ export default function Header(props) {
   useEffect(() => {
     if (loggedInUser && logout) {
       setTimeout(() => {
-        setIsLoading(false);
+
       }, 1000);
+    } else {
+      setIsLoading(false);
     }
   }, [loggedInUser, logout]);
 
-  // if (isLoading) {
-  //   return <ClipLoader
-  //     // color={color}
-  //     loading={isLoading}
-  //     size={100}
-  //     aria-label="Loading Spinner"
-  //     data-testid="loader"
-  //   />;
-  // }
+  if (isLoading) {
+    return <>
+      <Loader center content="Loading" />
+      <Placeholder.Paragraph rows={8} />
+    </>;
+  }
 
   const numberOfCartItems = items.reduce((curNumber, item) => {
     return curNumber + item.amount;
@@ -101,6 +101,14 @@ export default function Header(props) {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+
+  //Logout here
+  const handleLogout = () => {
+    logout();
+    handleMenuClose();
+    navigate("/", { replace: true });
+  };
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -113,11 +121,6 @@ export default function Header(props) {
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
-  };
-
-  const handleLogout = () => {
-    logout();
-    handleMenuClose();
   };
 
   const handleMobileMenuOpen = (event) => {
@@ -242,15 +245,13 @@ export default function Header(props) {
           >
             <MenuIcon />
           </IconButton> */}
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ display: { xs: "none", sm: "block" } }}>
+            <Typography variant="h6" noWrap component="div" sx={{ display: { xs: "none", sm: "block" } }}>
               <Link to="/" className={classes.logo}>
-                <h1>Swiggy</h1>
+                {/* <img src={logo} alt="TasteBazaar Logo" style={{ width: '42%' }} /> */}
+                <h1>TasteBazaar</h1>
               </Link>
             </Typography>
+
 
             {/* <Search>
             <SearchIconWrapper>
