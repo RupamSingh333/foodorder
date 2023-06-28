@@ -148,7 +148,6 @@ export default function Header(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}>
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      {/* <MenuItem onClick={handleMenuClose}>My account</MenuItem> */}
       <MenuItem onClick={handleMenuClose}>
         <Link to="/add-product" style={menuItemStyle}>
           Add Product
@@ -157,11 +156,6 @@ export default function Header(props) {
       <MenuItem onClick={handleLogout}>
         <Link style={menuItemStyle}>Logout</Link>
       </MenuItem>
-      {/* <MenuItem onClick={handleMenuClose}>
-        <Link to="/signup" style={menuItemStyle}>
-          Signup
-        </Link>
-      </MenuItem> */}
     </Menu>
   );
 
@@ -181,6 +175,8 @@ export default function Header(props) {
       }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}>
+        
+
       <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
@@ -189,6 +185,7 @@ export default function Header(props) {
         </IconButton>
         <p>Messages</p>
       </MenuItem>
+
       <MenuItem>
         <IconButton
           size="large"
@@ -228,6 +225,7 @@ export default function Header(props) {
         </IconButton>
         <p>Add Product</p>
       </MenuItem>
+
     </Menu>
   );
 
@@ -245,9 +243,8 @@ export default function Header(props) {
           >
             <MenuIcon />
           </IconButton> */}
-            <Typography variant="h6" noWrap component="div" sx={{ display: { xs: "none", sm: "block" } }}>
+            <Typography variant="h6" noWrap component="div" sx={{ display: { xs: "block", sm: "block" } }}>
               <Link to="/" className={classes.logo}>
-                {/* <img src={logo} alt="TasteBazaar Logo" style={{ width: '42%' }} /> */}
                 <h1>TasteBazaar</h1>
               </Link>
             </Typography>
@@ -350,11 +347,6 @@ export default function Header(props) {
         <div className={classes["image-container"]}>
           <img src={mealsImage} alt="A table full of delicious food!" />
         </div>
-
-        {/* <div class={classes["search-container"]}>
-          <input type="text" placeholder="Search" />
-          <button class={classes["search-button"]}>Search</button>
-        </div> */}
       </div>
     </Fragment>
   );
