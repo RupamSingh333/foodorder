@@ -40,8 +40,8 @@ Clone the repository from GitHub:
 
 bash
 Copy code
-git clone <repository_url>
-Install the necessary dependencies for the backend and frontend. Refer to the respective README files within the project for specific instructions.
+git clone (https://github.com/RupamSingh333/foodorder.git)
+Install the necessary dependencies for the backend and front end. Refer to the respective README files within the project for specific instructions.
 
 Set up the database and configure the connection details. Ensure you have a working database system installed and running.
 
